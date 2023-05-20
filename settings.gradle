@@ -1,0 +1,10 @@
+rootProject.name = 'csv-import-export'
+include 'api'
+include 'data'
+include 'api:domain'
+findProject(':api:domain')?.name = 'domain'
+include 'api:domain'
+findProject(':api:domain')?.name = 'domain'
+include 'domain'
+include 'api'
+
