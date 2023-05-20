@@ -42,23 +42,24 @@ public class ExerciseRepositoryData implements ExerciseRepository {
 
     @Override
     public Exercise save(Exercise exercise) {
-        return this.exerciseRepositoryDataJpa.save(
-                ExerciseData.builder()
-                        .id(exercise.getId())
-                        .source(exercise.getSource())
-                        .codeListCode(exercise.getCodeListCode())
-                        .code(exercise.getCode())
-                        .displayValue(exercise.getDisplayValue())
-                        .longDescription(exercise.getLongDescription())
-                        .fromDate(exercise.getFromDate())
-                        .toDate(exercise.getToDate())
-                        .sortingPriority(exercise.getSortingPriority())
-                        .createdBy(exercise.getCreatedBy())
-                        .createdAt(exercise.getCreatedAt())
-                        .updatedBy(exercise.getUpdatedBy())
-                        .updatedAt(exercise.getUpdatedAt())
-                        .build()
-        ).toEntity();
+
+        ExerciseData newExerciseData = ExerciseData.builder()
+                .id(exercise.getId())
+                .source(exercise.getSource())
+                .codeListCode(exercise.getCodeListCode())
+                .code(exercise.getCode())
+                .displayValue(exercise.getDisplayValue())
+                .longDescription(exercise.getLongDescription())
+                .fromDate(exercise.getFromDate())
+                .toDate(exercise.getToDate())
+                .sortingPriority(exercise.getSortingPriority())
+                .createdBy(exercise.getCreatedBy())
+                .createdAt(exercise.getCreatedAt())
+                .updatedBy(exercise.getUpdatedBy())
+                .updatedAt(exercise.getUpdatedAt())
+                .build();
+
+        return this.exerciseRepositoryDataJpa.save(newExerciseData).toEntity();
     }
 
     @Override

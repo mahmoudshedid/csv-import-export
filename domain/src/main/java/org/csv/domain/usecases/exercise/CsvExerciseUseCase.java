@@ -28,7 +28,6 @@ public class CsvExerciseUseCase {
 
     public ByteArrayInputStream executeLoad() {
         List<Exercise> exercises = this.exerciseRepository.findAll();
-        ByteArrayInputStream in = CSVHelper.exercisesToCSV(exercises);
-        return in;
+        return CSVHelper.exercisesToCSV(exercises);
     }
 }

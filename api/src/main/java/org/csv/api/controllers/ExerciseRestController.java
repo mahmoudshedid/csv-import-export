@@ -143,6 +143,11 @@ public class ExerciseRestController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
     }
 
+    @ApiOperation(value = "Download exist Exercise as CSV")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Exercise Download Successfully"),
+            @ApiResponse(code = 400, message = "Bad request")
+    })
     @GetMapping("/download")
     public ResponseEntity<Resource> getFile() {
         String filename = "exercise.csv";

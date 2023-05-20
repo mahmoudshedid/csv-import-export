@@ -16,6 +16,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +45,15 @@ public class CSVHelper {
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendPattern("MM-dd-yyyy")
+                    .optionalStart()
+                    .appendPattern(" HH:mm")
+                    .optionalEnd()
+                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                    .toFormatter();
+
             for (CSVRecord csvRecord : csvRecords) {
 
                 Exercise exercise = Exercise.builder()
@@ -50,9 +62,12 @@ public class CSVHelper {
                         .code(csvRecord.get("code"))
                         .displayValue(csvRecord.get("displayValue"))
                         .longDescription(csvRecord.get("longDescription"))
-                        .fromDate(LocalDateTime.parse(csvRecord.get("fromDate")))
-                        .toDate(LocalDateTime.parse(csvRecord.get("toDate")))
-                        .sortingPriority(Long.parseLong(csvRecord.get("sortingPriority")))
+                        .fromDate(csvRecord.get("fromDate") != null && !csvRecord.get("fromDate").isEmpty() ?
+                                LocalDateTime.parse(csvRecord.get("fromDate"), formatter) : null)
+                        .toDate(csvRecord.get("toDate") != null && !csvRecord.get("toDate").isEmpty() ?
+                                LocalDateTime.parse(csvRecord.get("toDate"), formatter) : null)
+                        .sortingPriority(csvRecord.get("sortingPriority") != null && !csvRecord.get("sortingPriority").isEmpty() ?
+                                Long.parseLong(csvRecord.get("sortingPriority")) : null)
                         .build();
 
                 exercises.add(exercise);
@@ -77,9 +92,9 @@ public class CSVHelper {
                         exercise.getCode(),
                         exercise.getDisplayValue(),
                         exercise.getLongDescription(),
-                        exercise.getFromDate().toString(),
-                        exercise.getToDate().toString(),
-                        exercise.getSortingPriority().toString()
+                        exercise.getFromDate() != null ? exercise.getFromDate().toString() : "",
+                        exercise.getToDate() != null ? exercise.getToDate().toString() : "",
+                        exercise.getSortingPriority() != null ? exercise.getSortingPriority().toString() : ""
                 );
 
                 csvPrinter.printRecord(data);
