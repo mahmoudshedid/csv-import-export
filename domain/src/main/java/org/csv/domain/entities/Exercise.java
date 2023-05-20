@@ -22,7 +22,7 @@ public class Exercise extends BaseEntity {
     private String longDescription;
     private LocalDateTime fromDate;
     private LocalDateTime toDate;
-    private Long sortingPriority;
+    private Integer sortingPriority;
 
     public enum SortingFields {
         ID, NAME, CREATED_BY, CREATED_AT, UPDATED_BY, UPDATED_AT

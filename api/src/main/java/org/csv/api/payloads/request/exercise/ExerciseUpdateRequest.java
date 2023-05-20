@@ -14,6 +14,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 
 @Data
 @NoArgsConstructor
@@ -56,19 +59,19 @@ public class ExerciseUpdateRequest {
     @ApiModelProperty(notes = "Exercise Sorting Priority", example = "1")
     @Positive(message = "Sorting Priority should be positive")
     @NotNull(message = "Sorting Priority can't be blank")
-    private Long sortingPriority;
+    private Integer sortingPriority;
 
-    @ApiModelProperty(notes = "Exercise From Date", example = "MM/dd/yyyy")
+    @ApiModelProperty(notes = "Exercise From Date", example = "MM-dd-yyyy")
     @NotBlank(message = "From Date can't be blank")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "MM/dd/yyyy")
-    private LocalDateTime fromDate;
+    @JsonFormat(pattern = "MM-dd-yyyy")
+    private String fromDate;
 
-    @ApiModelProperty(notes = "Exercise To Date", example = "MM/dd/yyyy")
+    @ApiModelProperty(notes = "Exercise To Date", example = "MM-dd-yyyy")
     @NotBlank(message = "To Date can't be blank")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "MM/dd/yyyy")
-    private LocalDateTime toDate;
+    @JsonFormat(pattern = "MM-dd-yyyy")
+    private String toDate;
 
     @ApiModelProperty(notes = "Exercise Updated By", example = "example@example.com")
     @Pattern(regexp = Validation.EMAIL_PATTERN, message = "Enter a valid email")
@@ -77,6 +80,16 @@ public class ExerciseUpdateRequest {
     private String updatedBy;
 
     public Exercise toEntity() {
+
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("MM-dd-yyyy")
+                .optionalStart()
+                .appendPattern(" HH:mm")
+                .optionalEnd()
+                .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                .toFormatter();
+
         return Exercise.builder()
                 .id(this.id)
                 .source(this.source)
@@ -84,8 +97,8 @@ public class ExerciseUpdateRequest {
                 .code(this.code)
                 .displayValue(this.displayValue)
                 .longDescription(this.longDescription)
-                .fromDate(this.fromDate)
-                .toDate(this.toDate)
+                .fromDate(this.fromDate != null && !this.fromDate.isEmpty() ? LocalDateTime.parse(this.fromDate, formatter) : null)
+                .toDate(this.toDate != null && !this.toDate.isEmpty() ? LocalDateTime.parse(this.toDate, formatter) : null)
                 .sortingPriority(this.sortingPriority)
                 .updatedBy(this.updatedBy)
                 .build();

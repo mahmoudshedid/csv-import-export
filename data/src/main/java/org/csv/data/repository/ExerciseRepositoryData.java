@@ -42,8 +42,7 @@ public class ExerciseRepositoryData implements ExerciseRepository {
 
     @Override
     public Exercise save(Exercise exercise) {
-
-        ExerciseData newExerciseData = ExerciseData.builder()
+        return this.exerciseRepositoryDataJpa.save(ExerciseData.builder()
                 .id(exercise.getId())
                 .source(exercise.getSource())
                 .codeListCode(exercise.getCodeListCode())
@@ -57,9 +56,7 @@ public class ExerciseRepositoryData implements ExerciseRepository {
                 .createdAt(exercise.getCreatedAt())
                 .updatedBy(exercise.getUpdatedBy())
                 .updatedAt(exercise.getUpdatedAt())
-                .build();
-
-        return this.exerciseRepositoryDataJpa.save(newExerciseData).toEntity();
+                .build()).toEntity();
     }
 
     @Override

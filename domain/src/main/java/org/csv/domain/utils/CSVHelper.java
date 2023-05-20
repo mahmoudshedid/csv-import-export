@@ -67,7 +67,7 @@ public class CSVHelper {
                         .toDate(csvRecord.get("toDate") != null && !csvRecord.get("toDate").isEmpty() ?
                                 LocalDateTime.parse(csvRecord.get("toDate"), formatter) : null)
                         .sortingPriority(csvRecord.get("sortingPriority") != null && !csvRecord.get("sortingPriority").isEmpty() ?
-                                Long.parseLong(csvRecord.get("sortingPriority")) : null)
+                                Integer.parseInt(csvRecord.get("sortingPriority")) : null)
                         .build();
 
                 exercises.add(exercise);

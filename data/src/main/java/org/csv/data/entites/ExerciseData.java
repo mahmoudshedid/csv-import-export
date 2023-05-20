@@ -45,7 +45,7 @@ public class ExerciseData extends DataBaseEntity {
     private LocalDateTime toDate;
 
     @Column(name = "sorting_priority")
-    private Long sortingPriority;
+    private Integer sortingPriority;
 
     public ExerciseData(Exercise exercise) {
         super(exercise);
